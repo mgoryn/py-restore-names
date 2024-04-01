@@ -3,19 +3,30 @@ from app.restore_names import restore_names
 
 
 @pytest.mark.parametrize(
-    "first_name, last_name, full_name, expected_first_name", [
-        (None, "Holy", "Jack Holy", "Jack"),
-        ("", "Adams", "Mike Adams", ""),
-        ("John", "Doe", "John Doe", "John"),
-    ])
-def test_restore_names(
-        first_name: str,
-        last_name: str,
-        full_name: str,
-        expected_first_name: str) -> None:
-    users = [{"first_name": first_name,
-              "last_name": last_name,
-              "full_name": full_name
-              }]
+    "users, expected_result",
+    [
+        (
+            [
+                {"first_name": None,
+                 "last_name": "Holy",
+                 "full_name": "Jack Holy"},
+                {"last_name": "Adams",
+                 "full_name": "Mike Adams"},
+            ],
+            [
+                {"first_name": "Jack",
+                 "last_name": "Holy",
+                 "full_name": "Jack Holy"},
+                {"first_name": "Mike",
+                 "last_name": "Adams",
+                 "full_name": "Mike Adams"},
+            ]
+        )
+    ]
+)
+def test_restore_names_with_missing_first_name(
+        users: list[dict],
+        expected_result: list[dict]
+) -> None:
     restore_names(users)
-    assert users[0]["first_name"] == expected_first_name
+    assert users == expected_result
